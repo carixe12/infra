@@ -1,0 +1,39 @@
+- name: Deploy application
+  hosts: web
+  become: true
+  tasks:
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+
+    - name: Pull Docker image
+      docker_image:
+        name: myapp:latest
+
+    - name: Write systemd unit file
+      template:
+        src: myapp.service.j2
+        dest: /etc/systemd/system/myapp.service
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+
+    - name: Enable myapp service
+      systemd:
+        name: myapp
+        enabled: yes
+
+    - name: Start myapp service
+      systemd:
+        name: myapp
+        state: started
