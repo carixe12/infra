@@ -1,0 +1,11 @@
+[Unit]
+Description=My App
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker run --name myapp -p 80:80 myapp:latest
+
+[Install]
+WantedBy=multi-user.target

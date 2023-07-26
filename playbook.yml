@@ -1,5 +1,5 @@
-- name: Deploy application
-  hosts: web
+- name: Deploy myapp on AWS
+  hosts: aws_instance
   become: true
   tasks:
     - name: Install Docker
@@ -7,14 +7,10 @@
         name: docker.io
         state: present
 
-    - name: Start Docker service
-      service:
-        name: docker
-        state: started
-
-    - name: Pull Docker image
+    - name: Copy Docker image
       docker_image:
         name: myapp:latest
+        source: registry.example.com/myapp:latest
 
     - name: Write systemd unit file
       template:
