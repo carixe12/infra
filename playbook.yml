@@ -7,29 +7,3 @@
         name: docker.io
         state: present
 
-    - name: Copy Docker image
-      docker_image:
-        name: myapp:latest
-        source: registry.example.com/myapp:latest
-
-    - name: Write systemd unit file
-      template:
-        src: myapp.service.j2
-        dest: /etc/systemd/system/myapp.service
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Reload systemd
-      systemd:
-        daemon_reload: yes
-
-    - name: Enable myapp service
-      systemd:
-        name: myapp
-        enabled: yes
-
-    - name: Start myapp service
-      systemd:
-        name: myapp
-        state: started
